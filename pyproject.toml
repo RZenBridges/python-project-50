@@ -4,13 +4,13 @@ version = "0.1.0"
 description = "Compares two configuration files and shows a difference."
 authors = ["ubuntu_profile <rzenhier@gmail.com>"]
 readme = "README.md"
-packages = [{include = "finddiff"}]
+packages = [{include = "gendiff"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
 [tool.poetry.scripts]
-gendiff = "finddiff.fdiff_help:main"
+gendiff = "gendiff.fdiff_help:main"
 
 [build-system]
 requires = ["poetry-core"]
