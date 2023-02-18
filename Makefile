@@ -15,3 +15,4 @@ lint:
 
 test:
 	poetry run pytest
+	poetry run pytest --cov=gendiff
