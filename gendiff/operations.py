@@ -11,15 +11,11 @@ def diff_check(json1, json2):
     for k1 in json1:
         if k1 in json2 and json1[k1] == json2[k1]:
             difference += f"    {k1}: {json1[k1]}\n"
-        elif k1 not in json2:
-            difference += f"  - {k1}: {json1[k1]}\n"
-        elif k1 in json2 and json1[k1] != json2[k1]:
+        elif (k1 not in json2) or (k1 in json2 and json1[k1] != json2[k1]):
             difference += f"  - {k1}: {json1[k1]}\n"
 
     for k2 in json2:
-        if k2 not in json1:
-            difference += f"  + {k2}: {json2[k2]}\n"
-        elif k2 in json1 and json2[k2] != json1[k2]:
+        if (k2 not in json1) or (k2 in json1 and json2[k2] != json1[k2]):
             difference += f"  + {k2}: {json2[k2]}\n"
 
     difference += "}\n"
