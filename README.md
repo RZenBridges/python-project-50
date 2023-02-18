@@ -3,5 +3,7 @@
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/5cbf8d32c7a2e745d1b2/maintainability)](https://codeclimate.com/github/RZenBridges/python-project-50/maintainability)
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5cbf8d32c7a2e745d1b2/test_coverage)](https://codeclimate.com/github/RZenBridges/python-project-50/test_coverage)
+
 See how gendiff works at the link:
 https://asciinema.org/a/tYrAU3IkT4gWEecq60rpZsx8x
