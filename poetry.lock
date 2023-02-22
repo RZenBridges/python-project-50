@@ -250,20 +250,6 @@ pytest = ">=4.6"
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
 
 [[package]]
-name = "PyYAML"
-version = "6.0"
-description = "YAML parser and emitter for Python"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-files = []
-develop = false
-
-[package.source]
-type = "directory"
-url = "../PyYAML-6.0"
-
-[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -278,4 +264,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "aa0e03de492f20367f5a1a3fb940b81c2c83559984895355863bcf43413de681"
+content-hash = "657554a693e4b0fe38f200142ff58352b4641e45a74e3bc0b2096d044e44f126"
