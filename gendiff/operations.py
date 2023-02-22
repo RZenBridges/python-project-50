@@ -1,8 +1,4 @@
-import json
-
-
-def path_to_json(file_path):
-    return json.load(open(file_path))
+from gendiff.data_parsing import adjust_format
 
 
 def diff_check(json1, json2):
@@ -23,9 +19,9 @@ def diff_check(json1, json2):
 
 
 def generate_diff(file_path1, file_path2):
-    json1 = path_to_json(file_path1)
-    json2 = path_to_json(file_path2)
-    result = diff_check(json1, json2)
+    content1 = adjust_format(file_path1)
+    content2 = adjust_format(file_path2)
+    result = diff_check(content1, content2)
     print(result)
     return result
 
