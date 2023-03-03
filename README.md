@@ -7,7 +7,5 @@
 
 
 See how gendiff works at the link:
-[![asciicast](https://asciinema.org/a/tYrAU3IkT4gWEecq60rpZsx8x.svg)](https://asciinema.org/a/tYrAU3IkT4gWEecq60rpZsx8x)
+[![asciicast](https://asciinema.org/a/JzDm3fvtPuBRJfh8pWSQz9dfd.svg)](https://asciinema.org/a/JzDm3fvtPuBRJfh8pWSQz9dfd)
 
-See how gendiff works not only with .json but also .yml and .yaml files:
-[![asciicast](https://asciinema.org/a/zGzL7DNRlCTRTibfRQiEZdXFt.svg)](https://asciinema.org/a/zGzL7DNRlCTRTibfRQiEZdXFt)

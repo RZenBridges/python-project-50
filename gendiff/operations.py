@@ -1,31 +1,6 @@
 from gendiff.data_parsing import adjust_format
 
 
-def stylish(input):
-    def formating(dictionary, depth):
-        if not isinstance(dictionary, dict):
-            return str(dictionary)
-        sorted_dict = dict(
-            sorted(
-                dictionary.items(),
-                key=lambda item: item[0][4:]
-            )
-        )
-        result = "{\n"
-        current_depth = depth
-        bare_indent = "    " * current_depth
-        current_depth += 1
-        for key, value in sorted_dict.items():
-            if value in ("True", "False"):
-                value = value.lower()
-            if value == "None":
-                value = "null"
-            result += f"{bare_indent}{key}: {formating(value, current_depth)}\n"
-        result += f"{bare_indent}" + "}"
-        return result
-    return formating(input, 0)
-
-
 def low_level_diff_1(k1, value1, value2, depth, match, minus, dif, func):
     if not isinstance(value2, str) and not isinstance(value1, str):
         main_cond = k1 in value2
@@ -86,11 +61,10 @@ def diff_check(json1, json2):
     return matching(json1, json2, 0)
 
 
-def generate_diff(file_path1, file_path2):
+def generate_diff(file_path1, file_path2, format):
     content1 = adjust_format(file_path1)
     content2 = adjust_format(file_path2)
-    result = stylish(diff_check(content1, content2))
-    print(result)
+    result = format(diff_check(content1, content2))
     return result
 
 # generate_diff('/home/istari/file1.json', '/home/istari/file2.json')
