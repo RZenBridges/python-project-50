@@ -10,8 +10,12 @@ def main():
         prog='gendiff',
         description='Compares two configuration files and shows a difference.',
         usage='%(prog)s [options] <filepath1> <filepath2>')
-    parser.add_argument('first_file', type=pathlib.Path, help=argparse.SUPPRESS)
-    parser.add_argument('second_file', type=pathlib.Path, help=argparse.SUPPRESS)
+    parser.add_argument('first_file',
+                        type=pathlib.Path,
+                        help=argparse.SUPPRESS)
+    parser.add_argument('second_file',
+                        type=pathlib.Path,
+                        help=argparse.SUPPRESS)
     parser.add_argument('-V',
                         '--version',
                         help='output the version number',
@@ -29,6 +33,7 @@ def main():
     elif args.form == stylish:
         result = generate_diff(args.first_file, args.second_file, args.form)
     print(result)
+
 
 if __name__ == "__main__":
     main()
