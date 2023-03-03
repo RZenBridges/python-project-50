@@ -7,5 +7,5 @@
 
 
 See how gendiff works at the link:
-[![asciicast](https://asciinema.org/a/JzDm3fvtPuBRJfh8pWSQz9dfd.svg)](https://asciinema.org/a/JzDm3fvtPuBRJfh8pWSQz9dfd)
+[![asciicast](https://asciinema.org/a/564394.svg)](https://asciinema.org/a/564394)
 

@@ -12,7 +12,18 @@ def conform(value, check='display'):
     return value
 
 
+def jsonify(input):
+    result = ''
+    for i in str(input):
+        if i != "'":
+            result += i
+        else:
+            result += '"'
+    return result
+
+
 def stylish(input):
+    """Stylises gendiff'ed dictionary into a dicionary-like output"""
     def formating(dictionary, depth):
         if not isinstance(dictionary, dict):
             return str(dictionary)
@@ -35,6 +46,8 @@ def stylish(input):
 
 
 def plain(input):
+    """Stylises gendiff'ed dictionary into a line-by-line comparison"""
+    """between two files put into gendiff command"""
     output = pre_plain(input).strip("##").split("##")
     dictionary = {}
     for item in output:

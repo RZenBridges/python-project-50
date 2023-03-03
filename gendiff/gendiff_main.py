@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import argparse
 from gendiff.operations import generate_diff
-from gendiff.format import stylish, plain
+from gendiff.format import stylish, plain, jsonify
 import pathlib
 
 
@@ -24,12 +24,14 @@ def main():
                         '--format',
                         help='output format (default: "%(default)s")',
                         dest='form',
-                        choices=['plain'],
-                        metavar='[type]',
+                        choices=['plain', 'json'],
+                        metavar='',
                         default=stylish)
     args = parser.parse_args()
     if args.form == 'plain':
         result = generate_diff(args.first_file, args.second_file, plain)
+    elif args.form == 'json':
+        result = generate_diff(args.first_file, args.second_file, jsonify)
     elif args.form == stylish:
         result = generate_diff(args.first_file, args.second_file, args.form)
     print(result)

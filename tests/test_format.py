@@ -1,4 +1,4 @@
-from gendiff.format import stylish, plain
+from gendiff.format import stylish, plain, jsonify
 import json
 
 
@@ -20,3 +20,7 @@ def test_stylish_1():
 def test_plain_1():
     with open('tests/fixtures/format_plain.txt') as data:
         assert plain(input_check) == data.read().strip()
+
+def test_jsonify():
+    with open('tests/fixtures/format_json.txt') as data:
+        assert jsonify(input_check) == data.read().strip()
