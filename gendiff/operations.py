@@ -1,6 +1,7 @@
 from gendiff.data_parsing import adjust_format
 from gendiff.format import stylish
 
+
 def low_level_diff_1(k1, value1, value2, depth, match, minus, dif, func):
     if not isinstance(value2, str) and not isinstance(value1, str):
         main_cond = k1 in value2
