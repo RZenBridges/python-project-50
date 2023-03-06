@@ -1,4 +1,4 @@
-from gendiff.gendiff_main import main
+from gendiff.scripts.gendiff import main
 import os
 
 def test_gendiff_main_1():

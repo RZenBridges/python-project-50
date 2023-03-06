@@ -67,4 +67,11 @@ def generate_diff(file_path1, file_path2, format):
     result = format(diff_check(content1, content2))
     return result
 
-# generate_diff('/home/istari/file1.json', '/home/istari/file2.json')
+
+def versioning():
+    with open('pyproject.toml', 'r') as data:
+        poetry_data = data.read().split('\n')
+        for i in poetry_data:
+            if i.startswith('version'):
+                number = i.split()[-1]
+                return number.strip('"')

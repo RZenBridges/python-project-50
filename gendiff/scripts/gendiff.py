@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import argparse
-from gendiff.operations import generate_diff
+from gendiff.operations import generate_diff, versioning
 from gendiff.format import stylish, plain, jsonify
 import pathlib
 
@@ -18,8 +18,10 @@ def main():
                         help=argparse.SUPPRESS)
     parser.add_argument('-V',
                         '--version',
+                        dest='version',
                         help='output the version number',
-                        action='version')
+                        action='version',
+                        version=f'%(prog)s {versioning()}')
     parser.add_argument('-f',
                         '--format',
                         help='output format (default: "%(default)s")',
