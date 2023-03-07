@@ -55,7 +55,7 @@ def plain(input):
         value = items[1].strip('(').strip(')').split(', ')
         if dictionary.get(items[0]) is None:
             dictionary[items[0]] = {}
-        if value[1].strip("'") in ('true', 'false', 'null', '[complex value]'):
+        if value[1].strip("'") in ('true', 'false', 'null', '[complex value]', '0'):
             value[1] = value[1].strip("'")
         dictionary[items[0]].update({value[0].strip("'"): value[1]})
     result = ''
