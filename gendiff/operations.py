@@ -6,7 +6,9 @@ def low_level_diff_1(k1, value1, value2, depth, match, minus, dif, func):
     if not isinstance(value2, str) and not isinstance(value1, str):
         main_cond = k1 in value2
         cond_1 = value1.get(k1) == value2.get(k1)
-        cond_2 = not cond_1 and isinstance(value2.get(k1), dict) and isinstance(value1.get(k1), dict)
+        cond_021 = isinstance(value2.get(k1), dict)
+        cond_022 = isinstance(value1.get(k1), dict)
+        cond_2 = not cond_1 and cond_021 and cond_022
         cond_3 = isinstance(value2, dict)
 
         if main_cond and (cond_1 or cond_2 or not cond_3):
@@ -26,7 +28,9 @@ def low_level_diff_2(k2, value1, value2, depth, plus, dif, func):
         no_gaps_dif = [i[:4] for i in dif.keys()]
         cond_1 = k2 in no_gaps_dif
         cond_2 = value1.get(k2) != value2.get(k2)
-        cond_3 = isinstance(value2.get(k2), dict) and isinstance(value1.get(k2), dict)
+        cond_031 = isinstance(value2.get(k2), dict)
+        cond_032 = isinstance(value1.get(k2), dict)
+        cond_3 = cond_031 and cond_032
         term_1 = not main_cond and not cond_1
         term_2 = main_cond and cond_2 and not cond_3
         if term_1 or term_2:

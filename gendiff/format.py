@@ -48,6 +48,7 @@ def stylish(input):
 def plain(input):
     """Stylises gendiff'ed dictionary into a line-by-line comparison"""
     """between two files put into gendiff command"""
+    admitted = ('true', 'false', 'null', '[complex value]', '0')
     output = pre_plain(input).strip("##").split("##")
     dictionary = {}
     for item in output:
@@ -55,7 +56,7 @@ def plain(input):
         value = items[1].strip('(').strip(')').split(', ')
         if dictionary.get(items[0]) is None:
             dictionary[items[0]] = {}
-        if value[1].strip("'") in ('true', 'false', 'null', '[complex value]', '0'):
+        if value[1].strip("'") in admitted:
             value[1] = value[1].strip("'")
         dictionary[items[0]].update({value[0].strip("'"): value[1]})
     result = ''
