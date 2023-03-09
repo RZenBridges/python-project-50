@@ -31,11 +31,17 @@ def main():
                         default='stylish')
     args = parser.parse_args()
     if args.form == 'plain':
-        result = generate_diff(args.first_file, args.second_file, format_of_choice('plain'))
+        result = generate_diff(args.first_file,
+                               args.second_file,
+                               format_of_choice('plain'))
     elif args.form == 'json':
-        result = generate_diff(args.first_file, args.second_file, format_of_choice('json'))
+        result = generate_diff(args.first_file,
+                               args.second_file,
+                               format_of_choice('json'))
     elif args.form == 'stylish':
-        result = generate_diff(args.first_file, args.second_file, format_of_choice('stylish'))
+        result = generate_diff(args.first_file,
+                               args.second_file,
+                               format_of_choice('stylish'))
     print(result)
 
 
