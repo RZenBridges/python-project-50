@@ -116,6 +116,6 @@ def no_update_in_dict(dictionary, search):
 def format_of_choice(arg):
     if callable(arg):
         return arg
-    action = {'stylish': stylish, 'plain': plain, 'jsonify': jsonify}
+    action = {'stylish': stylish, 'plain': plain, 'json': jsonify}
     if isinstance(arg, str):
         return action[arg]
