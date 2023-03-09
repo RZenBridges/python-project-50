@@ -111,3 +111,11 @@ def no_update_in_dict(dictionary, search):
                 return True
             if isinstance(dictionary[key], dict):
                 return no_update_in_dict(dictionary[key], search)
+
+
+def format_of_choice(arg):
+    if callable(arg):
+        return arg
+    action = {'stylish': stylish, 'plain': plain, 'jsonify': jsonify}
+    if isinstance(arg, str):
+        return action[arg]

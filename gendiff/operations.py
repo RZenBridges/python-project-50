@@ -1,5 +1,5 @@
 from gendiff.data_parsing import adjust_format
-from gendiff.format import stylish
+from gendiff.format import format_of_choice
 
 
 def low_level_diff_1(k1, value1, value2, depth, match, minus, dif, func):
@@ -67,12 +67,11 @@ def diff_check(json1, json2):
     return matching(json1, json2, 0)
 
 
-def generate_diff(file_path1, file_path2, format=stylish):
-    if type(format) == str and format == 'stylish':
-        format = stylish
+def generate_diff(file_path1, file_path2, format=format_of_choice('stylish')):
+    format_upd = format_of_choice(format)
     content1 = adjust_format(file_path1)
     content2 = adjust_format(file_path2)
-    result = format(diff_check(content1, content2))
+    result = format_upd(diff_check(content1, content2))
     return result
 
 
