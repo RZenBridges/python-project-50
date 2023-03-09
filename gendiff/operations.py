@@ -68,6 +68,8 @@ def diff_check(json1, json2):
 
 
 def generate_diff(file_path1, file_path2, format=stylish):
+    if type(format) == str and format.__name__== 'stylsih':
+        format = stylish
     content1 = adjust_format(file_path1)
     content2 = adjust_format(file_path2)
     result = format(diff_check(content1, content2))
