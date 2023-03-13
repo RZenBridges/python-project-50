@@ -1,25 +1,25 @@
-from gendiff.data_parsing import adjust_format
+from gendiff.data_parsing import parse_file
 
 
-def test_adjust_format1():
+def test_parse_file_1():
     with open('tests/fixtures/file1.txt', 'r') as data:
-        result = str(adjust_format('tests/fixtures/file1.json'))
+        result = str(parse_file('tests/fixtures/file1.json'))
         assert result == data.read().strip()
 
 
-def test_adjust_format2():
+def test_parse_file_2():
     with open('tests/fixtures/file2.txt', 'r') as data:
-        result = str(adjust_format('tests/fixtures/file2.json'))
+        result = str(parse_file('tests/fixtures/file2.json'))
         assert result == data.read().strip()
 
 
-def test_adjust_format3():
+def test_parse_file_3():
     with open('tests/fixtures/file1.txt', 'r') as data:
-        result = str(adjust_format('tests/fixtures/file1.yml'))
+        result = str(parse_file('tests/fixtures/file1.yml'))
         assert result == data.read().strip()
 
 
-def test_adjust_format4():
+def test_parse_file_4():
     with open('tests/fixtures/file2.txt', 'r') as data:
-        result = str(adjust_format('tests/fixtures/file2.yml'))
+        result = str(parse_file('tests/fixtures/file2.yml'))
         assert result == data.read().strip()

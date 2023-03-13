@@ -119,3 +119,6 @@ def format_of_choice(arg):
     action = {'stylish': stylish, 'plain': plain, 'json': jsonify}
     if isinstance(arg, str):
         return action[arg]
+
+
+CHOICES = ['stylish', 'plain', 'json']

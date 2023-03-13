@@ -1,21 +1,14 @@
-import json
-import yaml
-from pathlib import PurePosixPath
+from gendiff.read_file import yaml_to_text, json_to_text
+from pathlib import PurePosixPath, PureWindowsPath
+import platform
 
 
-def adjust_format(path):
-    file_name = PurePosixPath(path).name
+def parse_file(path):
+    if platform.system() == 'Linux':
+        file_name = PurePosixPath(path).name
+    elif platform.system() == 'Windows':
+        file_name = PureWindowsPath(path).name
     if file_name.endswith('.yaml') or file_name.endswith('.yml'):
-        return path_to_yaml(path)
+        return yaml_to_text(path)
     if file_name.endswith('.json'):
-        return path_to_json(path)
-
-
-def path_to_yaml(file_path):
-    with open(file_path) as data:
-        return yaml.load(data, Loader=yaml.Loader)
-
-
-def path_to_json(file_path):
-    with open(file_path) as data:
-        return json.load(data)
+        return json_to_text(path)

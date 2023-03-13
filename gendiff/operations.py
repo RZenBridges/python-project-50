@@ -1,4 +1,4 @@
-from gendiff.data_parsing import adjust_format
+from gendiff.data_parsing import parse_file
 from gendiff.format import format_of_choice
 
 
@@ -69,8 +69,8 @@ def diff_check(json1, json2):
 
 def generate_diff(file_path1, file_path2, format=format_of_choice('stylish')):
     format_upd = format_of_choice(format)
-    content1 = adjust_format(file_path1)
-    content2 = adjust_format(file_path2)
+    content1 = parse_file(file_path1)
+    content2 = parse_file(file_path2)
     result = format_upd(diff_check(content1, content2))
     return result
 
