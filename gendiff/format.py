@@ -1,116 +1,102 @@
+import json
 
 
-def conform(value, check='display'):
-    if value in ('True', 'False'):
-        value = value.lower()
-    if value == 'None':
+def conform(value, *args):
+    """Transforms boolean pythonic values and compresses dictionaries"""
+    if value in (True, False):
+        value = str(value).lower()
+    if value is None:
         value = 'null'
-    if value == 'display':
+    if len(args) == 0:
         return value
-    if isinstance(value, dict) and check == 'dict':
+    if isinstance(value, dict) and args[0] == 'dict':
         value = '[complex value]'
     return value
 
 
-def jsonify(input):
-    result = ''
-    for i in str(input):
-        if i != "'":
-            result += i
-        else:
-            result += '"'
-    return result
+def jsonify(diffed):
+    return json.dumps(diffed)
 
 
-def stylish(input):
+def _priming(key, value, step, indent, cur_depth, result, form):
+    #THIS FUNCTION IS USED UNSIDE STYLISH FUNCTION
+    term = value.get('changed')
+    if term and 'nested' in value:
+        val = conform(form(value.get('nested'), cur_depth))
+        result += f"{step}{indent['bare']}{key}: {val}\n"
+
+    elif term and 'removed' in value and 'added' in value:
+        val = conform(form(value.get('removed'), cur_depth))
+        result += f"{step}{indent['minus']}{key}: {val}\n"
+        val = conform(form(value.get('added'), cur_depth))
+        result += f"{step}{indent['plus']}{key}: {val}\n"
+
+    elif term and 'removed' in value:
+        val = conform(form(value.get('removed'), cur_depth))
+        result += f"{step}{indent['minus']}{key}: {val}\n"
+
+    elif not term and 'value' in value:
+        val = conform(form(value.get('value'), cur_depth))
+        result += f"{step}{indent['bare']}{key}: {val}\n"
+
+    elif term is None:
+        val = conform(form(value.get('added'), cur_depth))
+        result += f"{step}{indent['plus']}{key}: {val}\n"
+    return (result, step, cur_depth)
+
+
+def stylish(diffed):
     """Stylises gendiff'ed dictionary into a dicionary-like output"""
-    def formating(dictionary, depth):
-        if not isinstance(dictionary, dict):
-            return str(dictionary)
-        sorted_dict = dict(
-            sorted(
-                dictionary.items(),
-                key=lambda item: item[0][4:]
-            )
-        )
+
+    indent = {'bare': '    ', 'minus': '  - ', 'plus': '  + '}
+
+    def form(data, depth):
+        if not isinstance(data, dict):
+            return data
         result = "{\n"
-        current_depth = depth
-        bare_indent = "    " * current_depth
-        current_depth += 1
-        for key, value in sorted_dict.items():
-            value = conform(value, 'display')
-            result += f"{bare_indent}{key}: {formating(value, current_depth)}\n"
-        result += f"{bare_indent}" + "}"
+        cur_depth = depth
+        step = indent['bare'] * cur_depth
+        cur_depth += 1
+        sorted_data = sorted(data.keys())
+        for key in sorted_data:
+            value = data[key]
+            if isinstance(value, dict) and key == value.get('title'):
+                inner = _priming(key, value, step, indent,
+                                 cur_depth, result, form)
+                result, step, cur_depth = inner
+            else:
+                val = conform(form(value, cur_depth))
+                result += f"{step}{indent['bare']}{key}: {val}\n"
+        result += f"{step}" + "}"
         return result
-    return formating(input, 0)
+    return form(diffed, 0)
 
 
-def plain(input):
-    """Stylises gendiff'ed dictionary into a line-by-line comparison"""
-    """between two files put into gendiff command"""
-    admitted = ('true', 'false', 'null', '[complex value]', '0')
-    output = pre_plain(input).strip("##").split("##")
-    dictionary = {}
-    for item in output:
-        items = item.split('--')
-        value = items[1].strip('(').strip(')').split(', ')
-        if dictionary.get(items[0]) is None:
-            dictionary[items[0]] = {}
-        if value[1].strip("'") in admitted:
-            value[1] = value[1].strip("'")
-        dictionary[items[0]].update({value[0].strip("'"): value[1]})
-    result = ''
-    for k, v in dictionary.items():
-        if v.get('added') is not None and v.get('removed') is not None:
-            from_ = v['removed']
-            to_ = v['added']
-            result += f"Property '{k}' was updated. From {from_} to {to_}\n"
-        elif v.get('added') is not None:
-            result += f"Property '{k}' was added with value: {v['added']}\n"
-        elif v.get('removed') is not None:
-            result += f"Property '{k}' was removed\n"
-    return result.strip()
-
-
-def pre_plain(input):
-    def formating(dictionary, level):
-        if not isinstance(dictionary, dict):
-            return str(dictionary)
-        sorted_dict = dict(
-            sorted(
-                dictionary.items(),
-                key=lambda item: item[0][4:]
-            )
-        )
+def plain(diffed):
+    def form(data, level):
+        if not isinstance(data, dict):
+            return str(data)
+        sorted_data = sorted(data.keys())
         path = ''
-        options = ('    ', '  - ', '  + ')
-        for key, value in sorted_dict.items():
-            level += f"{key[4:]}."
-            com = isinstance(value, dict)
-            cond_1 = (not com or (com and not no_update_in_dict(value, '  - ')))
-            cond_2 = (not com or (com and not no_update_in_dict(value, '  + ')))
-            if key[:4] == '  - ' and cond_1:
-                value = conform(value, 'dict')
-                path += f"{level[:-1]}--('removed', '{value}')##"
-            elif key[:4] == '  + ' and cond_2:
-                value = conform(value, 'dict')
-                path += f"{level[:-1]}--('added', '{value}')##"
-            elif key[:4] == '    ' and not isinstance(value, dict):
-                pass
-            elif key[:4] in options and isinstance(value, dict):
-                path += f"{formating(value, level)}"
-            level = level[:-(len(key[4:]) + 1)]
+#        flag_changed = ('removed', 'added')
+        for key in sorted_data:
+            value = data[key]
+#            term_0 = isinstance(value, dict)
+#            must = term_0 and key == value.get('title')
+            title = value['title']
+            level += f"{title}."
+            # IN PROGRESS
         return path
-    return formating(input, '')
+    return form(diffed, '')
 
 
-def no_update_in_dict(dictionary, search):
+def no_update_in_dict(dictionary):
     if isinstance(dictionary, dict):
         for key in dictionary:
-            if search == key[:4]:
+            if dictionary.get('changed') is False:
                 return True
-            if isinstance(dictionary[key], dict):
-                return no_update_in_dict(dictionary[key], search)
+            if isinstance(dictionary.get(key), dict):
+                return no_update_in_dict(dictionary[key])
 
 
 def format_of_choice(arg):
