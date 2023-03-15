@@ -1,4 +1,4 @@
-from gendiff.operations import diff_check, parse_file
+from gendiff.gendiff_brain import diff_check, parse_file
 import json
 
 

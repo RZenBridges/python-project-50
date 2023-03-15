@@ -2,6 +2,7 @@ from gendiff.format.f_stylish import stylish
 from gendiff.format.f_plain import plain
 from gendiff.format.f_json import jsonify
 
+
 def format_of_choice(arg):
     if callable(arg):
         return arg
