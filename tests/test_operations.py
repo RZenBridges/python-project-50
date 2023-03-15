@@ -1,6 +1,7 @@
 from gendiff.operations import diff_check, parse_file
 import json
 
+
 def test_generate_diff_recursive_1():
     with open('tests/fixtures/recursive_result.txt', 'r') as data:
         control = data.read().strip().split('\n\n')
