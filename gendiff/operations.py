@@ -2,16 +2,13 @@ from gendiff.data_parsing import parse_file
 from gendiff.format import format_of_choice
 
 
-def data_check(value1, value2):
-    if not isinstance(value1, dict):
-        return value1
-    if not isinstance(value2, dict):
-        return value2
-
-
 def diff_check(value1, value2, nesting={}):
     # COMPLETLY REBUILT INNER DIFF STRUCTURE
-    data_check(value1, value2)
+
+    # if not isinstance(value1, dict):
+    #     return value1
+    # if not isinstance(value2, dict):
+    #     return value2
 
     for item, val in value1.items():
         result = {}
@@ -27,7 +24,7 @@ def diff_check(value1, value2, nesting={}):
 
         if result['changed'] and term_1 and not term_2:
             result['removed'] = val
-        elif term_2:
+        elif term_2 and term_1:
             result['nested'] = diff_check(val, value2.get(item), {})
 
         if 'removed' in result and item in value2:
