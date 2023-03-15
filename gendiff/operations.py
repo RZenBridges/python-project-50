@@ -1,15 +1,9 @@
 from gendiff.data_parsing import parse_file
-from gendiff.format import format_of_choice
+from gendiff.format.format import format_of_choice
 
 
 def diff_check(value1, value2, nesting={}):
     # COMPLETLY REBUILT INNER DIFF STRUCTURE
-
-    # if not isinstance(value1, dict):
-    #     return value1
-    # if not isinstance(value2, dict):
-    #     return value2
-
     for item, val in value1.items():
         result = {}
         result['title'] = item

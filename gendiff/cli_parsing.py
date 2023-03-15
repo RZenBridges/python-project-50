@@ -1,6 +1,6 @@
 import argparse
 import gendiff
-from gendiff.format import CHOICES
+from gendiff.format.format import CHOICES
 import pathlib
 
 

@@ -1,4 +1,4 @@
-from gendiff.format import stylish, plain, jsonify
+from gendiff.format.format import stylish, plain, jsonify
 import json
 
 

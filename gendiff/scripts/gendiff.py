@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from gendiff.operations import generate_diff
-from gendiff.format import format_of_choice, CHOICES
+from gendiff.format.format import format_of_choice, CHOICES
 from gendiff.cli_parsing import cli_call
 
 
