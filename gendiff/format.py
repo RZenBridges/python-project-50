@@ -1,15 +1,16 @@
 import json
 
 
-def conform(value, *args):
-    """Transforms boolean pythonic values and compresses dictionaries"""
+def conform(value, plained=False):
     if value in (True, False):
         value = str(value).lower()
-    if value is None:
+    elif value is None:
         value = 'null'
-    if len(args) == 0:
-        return value
-    if isinstance(value, dict) and args[0] == 'dict':
+    elif isinstance(value, str) and plained is True:
+        value = f"'{value}'"
+    elif isinstance(value, str) and plained is False:
+        pass
+    elif isinstance(value, dict):
         value = '[complex value]'
     return value
 
@@ -19,9 +20,9 @@ def jsonify(diffed):
 
 
 def _priming(key, value, step, indent, cur_depth, result, form):
-    #THIS FUNCTION IS USED UNSIDE STYLISH FUNCTION
+    # THIS FUNCTION IS USED UNSIDE STYLISH FUNCTION
     term = value.get('changed')
-    if term and 'nested' in value:
+    if term and 'nested' in value and isinstance(value['nested'], dict):
         val = conform(form(value.get('nested'), cur_depth))
         result += f"{step}{indent['bare']}{key}: {val}\n"
 
@@ -46,7 +47,7 @@ def _priming(key, value, step, indent, cur_depth, result, form):
 
 
 def stylish(diffed):
-    """Stylises gendiff'ed dictionary into a dicionary-like output"""
+    """Stylizes gendiff'ed dictionary into {key: value} comparison output"""
 
     indent = {'bare': '    ', 'minus': '  - ', 'plus': '  + '}
 
@@ -73,30 +74,33 @@ def stylish(diffed):
 
 
 def plain(diffed):
+    """ Stylizes gendiff'ed dictionary into line-by-line report on changes """
+    path = []
+
     def form(data, level):
-        if not isinstance(data, dict):
-            return str(data)
         sorted_data = sorted(data.keys())
-        path = ''
-#        flag_changed = ('removed', 'added')
         for key in sorted_data:
             value = data[key]
-#            term_0 = isinstance(value, dict)
-#            must = term_0 and key == value.get('title')
             title = value['title']
             level += f"{title}."
-            # IN PROGRESS
-        return path
+            lvl = level[:-1]
+            if 'nested' in value and isinstance(value['nested'], dict):
+                form(value['nested'], level)
+            elif 'removed' in value and 'added' in value:
+                r_val = conform(value.get('removed'), True)
+                a_val = conform(value.get('added'), True)
+                line = f"Property '{lvl}' was updated. From {r_val} to {a_val}"
+                path.append(line)
+            elif 'removed' in value and 'added' not in value:
+                line = f"Property '{lvl}' was removed"
+                path.append(line)
+            elif 'removed' not in value and 'added' in value:
+                a_val = conform(value.get('added'), True)
+                line = f"Property '{lvl}' was added with value: {a_val}"
+                path.append(line)
+            level = level[:-len(title) - 1]
+        return '\n'.join(path)
     return form(diffed, '')
-
-
-def no_update_in_dict(dictionary):
-    if isinstance(dictionary, dict):
-        for key in dictionary:
-            if dictionary.get('changed') is False:
-                return True
-            if isinstance(dictionary.get(key), dict):
-                return no_update_in_dict(dictionary[key])
 
 
 def format_of_choice(arg):
