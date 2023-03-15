@@ -3,7 +3,7 @@ import json
 
 
 with open('tests/fixtures/recursive_result.txt') as input:
-    data = input.read().strip().split('\n')
+    data = input.read().split('\n\n')
     variants = []
     for item in data:
         line = ''
