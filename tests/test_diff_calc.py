@@ -1,4 +1,4 @@
-from gendiff.gendiff_brain import diff_check, parse_file
+from gendiff.diff_calc import build_diff, parse_file
 import json
 
 
@@ -7,7 +7,7 @@ def test_generate_diff_recursive_1():
         control = data.read().strip().split('\n\n')
         file1 = parse_file('tests/fixtures/file1.json')
         file2 = parse_file('tests/fixtures/file2.json')
-        out = diff_check(file1, file2)
+        out = build_diff(file1, file2)
         assert out == json.loads(control[0])
 
 
@@ -16,7 +16,7 @@ def test_generate_diff_recursive_2():
         control = data.read().strip().split('\n\n')
         file1 = parse_file('tests/fixtures/file1.yml')
         file2 = parse_file('tests/fixtures/file2.yml')
-        out = diff_check(file1, file2)
+        out = build_diff(file1, file2)
         assert out == json.loads(control[0])
 
 
@@ -25,5 +25,5 @@ def test_generate_diff_recursive_3():
         control = data.read().strip().split('\n\n')
         file1 = parse_file('tests/fixtures/file5.yml')
         file2 = parse_file('tests/fixtures/file6.yml')
-        out = diff_check(file1, file2)
+        out = build_diff(file1, file2)
         assert out == json.loads(control[1])

@@ -1,5 +1,5 @@
 import json
 
 
-def jsonify(diffed):
+def render(diffed):
     return json.dumps(diffed)

@@ -1,7 +1,7 @@
 import argparse
 import gendiff
-from gendiff.format.format import CHOICES
 import pathlib
+from gendiff.format import CHOICES
 
 
 def cli_call():
@@ -24,8 +24,8 @@ def cli_call():
     parser.add_argument('-f',
                         '--format',
                         help='output format (default: "%(default)s")',
-                        dest='form',
                         choices=CHOICES,
                         metavar='',
                         default='stylish')
-    return parser.parse_args()
+    data = parser.parse_args()
+    return (data.first_file, data.second_file, data.format)
