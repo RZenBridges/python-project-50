@@ -2,7 +2,9 @@ import json
 
 
 def reform(data):
-    indent = {'unchanged': '    ', 'removed': '  - ', 'added': '  + '}
+    indent = {'unchanged': '    ',
+              'removed': '  - ',
+              'added': '  + '}
     return indent[data]
 
 
@@ -13,7 +15,7 @@ def to_js(data):
 
 def render(diffed):
 
-    def forme(data, depth):
+    def stylize(data, depth):
         cur_depth = depth
         step = '    ' * cur_depth
         cur_depth += 1
@@ -24,29 +26,35 @@ def render(diffed):
 
         elif isinstance(data, dict):
             for key, val in data.items():
-                recursive = forme(val, cur_depth)
+                recursive = stylize(val, cur_depth)
                 result += f'{step}    {key}: {recursive}\n'
 
         elif isinstance(data, (tuple, list)):
             for item in data:
-                key, state, val = item
-                if isinstance(val, list):
-                    recursive = forme(val, cur_depth)
-                    result += f'{step}    {key}: {recursive}\n'
-
-                elif isinstance(val, tuple):
-                    A = forme(val[0], cur_depth)
-                    result += f'{step}  - {key}: {A}\n'
-                    B = forme(val[1], cur_depth)
-                    result += f'{step}  + {key}: {B}\n'
-
-                elif not isinstance(val, dict):
-                    result += f'{step}{reform(state)}{key}: {to_js(val)}\n'
-
-                elif isinstance(val, dict):
-                    recursive = forme(val, cur_depth)
-                    result += f'{step}{reform(state)}{key}: {recursive}\n'
+                result, step = preform(item, step, cur_depth, stylize, result)
 
         result += step + '}'
         return result
-    return forme(diffed, 0)
+    return stylize(diffed, 0)
+
+
+def preform(item, step, cur_depth, stylize, result):
+    key, state, val = item
+    if isinstance(val, list):
+        recursive = stylize(val, cur_depth)
+        result += f'{step}    {key}: {recursive}\n'
+
+    elif isinstance(val, tuple):
+        recursive_A = stylize(val[0], cur_depth)
+        result += f'{step}  - {key}: {recursive_A}\n'
+        recursive_B = stylize(val[1], cur_depth)
+        result += f'{step}  + {key}: {recursive_B}\n'
+
+    elif not isinstance(val, dict):
+        result += f'{step}{reform(state)}{key}: {to_js(val)}\n'
+
+    elif isinstance(val, dict):
+        recursive = stylize(val, cur_depth)
+        result += f'{step}{reform(state)}{key}: {recursive}\n'
+
+    return result, step

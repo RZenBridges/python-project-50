@@ -1,10 +1,12 @@
 import argparse
-import gendiff
 import pathlib
+import gendiff
 from gendiff.format import CHOICES
 
 
-def cli_call():
+def cli_parse():
+    """ In CLI when utility 'gendiff' is called,
+    the function returns a tuple (file1, file2, formatter) """
     parser = argparse.ArgumentParser(
         prog='gendiff',
         description='Compares two configuration files and shows a difference.',
