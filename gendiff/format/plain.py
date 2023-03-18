@@ -5,7 +5,7 @@ def to_js(data):
     if not isinstance(data, dict):
         return json.dumps(data).replace('"', "'")
     else:
-        return "[complex_value]"
+        return "[complex value]"
 
 
 def render(diffed):
