@@ -9,30 +9,28 @@ def to_js(data):
 
 
 def render(diffed):
-    path = []
+    listed_changes = []
 
     def inner(data, level):
-        if not isinstance(data, (tuple, list, dict)):
-            return data
+        if not isinstance(data, list):
+            return
 
         for item in data:
             key, status, value = item
             level += f'{key}.'
             lvl = level[:-1]
-            if isinstance(value, tuple) and status == 'changed':
-                A = to_js(value[0])
-                B = to_js(value[1])
-                line = f"Property '{lvl}' was updated. From {A} to {B}"
-                path.append(line)
-            elif isinstance(value, list) and status == 'unchanged':
+            if status == 'changed':
+                line = f"Property '{lvl}' was updated."
+                line += f" From {to_js(value[0])} to {to_js(value[1])}"
+                listed_changes.append(line)
+            elif status == 'unchanged':
                 inner(value, level)
             elif status == 'added':
-                B = to_js(value)
-                line = f"Property '{lvl}' was added with value: {B}"
-                path.append(line)
+                line = f"Property '{lvl}' was added with value: {to_js(value)}"
+                listed_changes.append(line)
             elif status == 'removed':
                 line = f"Property '{lvl}' was removed"
-                path.append(line)
+                listed_changes.append(line)
             level = level[:-len(key) - 1]
-        return '\n'.join(path)
+        return '\n'.join(listed_changes)
     return inner(diffed, '')

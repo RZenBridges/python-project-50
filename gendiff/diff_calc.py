@@ -5,19 +5,13 @@ from gendiff.format import formatter
 def build_diff(value1, value2):
     result = []
 
-    unchanged = value1.keys() & value2.keys()
-    removed = value1.keys() - value2.keys()
-    added = value2.keys() - value1.keys()
+    for key in value1.keys() - value2.keys():
+        result.append((key, 'removed', value1[key]))
 
-    for key in removed:
-        val1 = value1[key]
-        result.append((key, 'removed', val1))
+    for key in value2.keys() - value1.keys():
+        result.append((key, 'added', value2[key]))
 
-    for key in added:
-        val2 = value2[key]
-        result.append((key, 'added', val2))
-
-    for key in unchanged:
+    for key in value1.keys() & value2.keys():
         val1 = value1[key]
         val2 = value2[key]
         if val1 == val2:

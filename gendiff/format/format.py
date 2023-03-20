@@ -6,8 +6,8 @@ from gendiff.format import jsonify
 CHOICES = ['stylish', 'plain', 'json']
 
 
-def formatter(arg: str):
+def formatter(format_option):
     action = {'stylish': stylish.render,
               'plain': plain.render,
               'json': jsonify.render}
-    return action[arg]
+    return action[format_option]
