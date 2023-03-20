@@ -11,7 +11,7 @@ def to_js(data):
 def render(diffed):
     path = []
 
-    def stylize(data, level):
+    def inner(data, level):
         if not isinstance(data, (tuple, list, dict)):
             return data
 
@@ -25,7 +25,7 @@ def render(diffed):
                 line = f"Property '{lvl}' was updated. From {A} to {B}"
                 path.append(line)
             elif isinstance(value, list) and status == 'unchanged':
-                stylize(value, level)
+                inner(value, level)
             elif status == 'added':
                 B = to_js(value)
                 line = f"Property '{lvl}' was added with value: {B}"
@@ -35,4 +35,4 @@ def render(diffed):
                 path.append(line)
             level = level[:-len(key) - 1]
         return '\n'.join(path)
-    return stylize(diffed, '')
+    return inner(diffed, '')

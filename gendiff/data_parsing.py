@@ -1,10 +1,10 @@
 import os
-from gendiff.read_file import yaml_to_text, json_to_text
+from gendiff import content
 
 
-def parse_file(path):
+def read_and_parse_file(path):
     file_name = os.path.basename(path)
     if file_name.endswith('.yaml') or file_name.endswith('.yml'):
-        return yaml_to_text(path)
+        return content.parse_file(path, 'yml')
     if file_name.endswith('.json'):
-        return json_to_text(path)
+        return content.parse_file(path, 'json')

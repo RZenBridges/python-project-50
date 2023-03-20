@@ -1,4 +1,4 @@
-from gendiff.data_parsing import parse_file
+from gendiff.data_parsing import read_and_parse_file
 from gendiff.format import formatter
 
 
@@ -31,8 +31,8 @@ def build_diff(value1, value2):
 
 
 def generate_diff(file_path1, file_path2, format='stylish'):
-    transmute = formatter(format)
-    content1 = parse_file(file_path1)
-    content2 = parse_file(file_path2)
-    result = transmute(build_diff(content1, content2))
+    format_fn = formatter(format)
+    content1 = read_and_parse_file(file_path1)
+    content2 = read_and_parse_file(file_path2)
+    result = format_fn(build_diff(content1, content2))
     return result
