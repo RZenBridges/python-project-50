@@ -1,8 +1,8 @@
 from gendiff.diff_calc import generate_diff
-from gendiff.cli_parsing import cli_parse
+from gendiff import cli
 
 
 def call_gendiff():
-    data_1, data_2, beautify = cli_parse()
-    result = generate_diff(data_1, data_2, beautify)
+    file_1, file_2, format = cli.get_arguments()
+    result = generate_diff(file_1, file_2, format)
     print(result)

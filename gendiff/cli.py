@@ -4,7 +4,7 @@ import gendiff
 from gendiff.format import CHOICES
 
 
-def cli_parse():
+def get_arguments():
     """ In CLI when utility 'gendiff' is called,
     the function returns a tuple (file1, file2, formatter) """
     parser = argparse.ArgumentParser(
