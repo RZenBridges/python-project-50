@@ -1,11 +1,9 @@
 import json
 
 
-def reform(data):
-    indent = {'unchanged': '    ',
-              'removed': '  - ',
-              'added': '  + '}
-    return indent[data]
+OPT = {'unchanged': '    ',
+       'removed': '  - ',
+       'added': '  + '}
 
 
 def to_js(data):
@@ -16,9 +14,8 @@ def to_js(data):
 def render(diffed):
 
     def inner(data, depth):
-        cur_depth = depth
-        step = '    ' * cur_depth
-        cur_depth += 1
+        step = '    ' * depth
+        depth += 1
         result = '{\n'
 
         if not isinstance(data, (tuple, list, dict)):
@@ -26,35 +23,23 @@ def render(diffed):
 
         elif isinstance(data, dict):
             for key, val in data.items():
-                recursive = inner(val, cur_depth)
-                result += f'{step}    {key}: {recursive}\n'
+                result += f'{step}    {key}: {inner(val, depth)}\n'
 
-        elif isinstance(data, (tuple, list)):
+        else:
             for item in data:
-                result, step = preform(item, step, cur_depth, inner, result)
+                key, state, val = item
+                if state == 'unchanged' or isinstance(val, dict):
+                    result += f'{step}{OPT[state]}{key}: {inner(val, depth)}\n'
+
+                elif state == 'changed':
+                    removed = inner(val[0], depth)
+                    added = inner(val[1], depth)
+                    result += f'{step}{OPT["removed"]}{key}: {removed}\n'
+                    result += f'{step}{OPT["added"]}{key}: {added}\n'
+
+                else:
+                    result += f'{step}{OPT[state]}{key}: {to_js(val)}\n'
 
         result += step + '}'
         return result
     return inner(diffed, 0)
-
-
-def preform(item, step, cur_depth, inner, result):
-    key, state, val = item
-    if isinstance(val, list):
-        recursive = inner(val, cur_depth)
-        result += f'{step}    {key}: {recursive}\n'
-
-    elif isinstance(val, tuple):
-        recursive_A = inner(val[0], cur_depth)
-        result += f'{step}  - {key}: {recursive_A}\n'
-        recursive_B = inner(val[1], cur_depth)
-        result += f'{step}  + {key}: {recursive_B}\n'
-
-    elif not isinstance(val, dict):
-        result += f'{step}{reform(state)}{key}: {to_js(val)}\n'
-
-    elif isinstance(val, dict):
-        recursive = inner(val, cur_depth)
-        result += f'{step}{reform(state)}{key}: {recursive}\n'
-
-    return result, step
