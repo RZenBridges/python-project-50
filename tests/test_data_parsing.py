@@ -17,7 +17,11 @@ input_4 = str(read_and_parse_file('tests/fixtures/file2.yml'))
 
 
 @pytest.mark.parametrize(
-    'test_input,expected',
-    [(input_1, expected_result_1), (input_2, expected_result_2), (input_3, expected_result_1), (input_4, expected_result_2)])
+    'test_input,expected', [
+        (input_1, expected_result_1),
+        (input_2, expected_result_2),
+        (input_3, expected_result_1),
+        (input_4, expected_result_2)
+    ])
 def test_read_and_parse_file(test_input, expected):
-        assert test_input == expected
+    assert test_input == expected

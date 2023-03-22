@@ -3,11 +3,16 @@ from gendiff.format import plain
 from gendiff.format import jsonify
 
 
-CHOICES = ['stylish', 'plain', 'json']
+STYLISH = 'stylish'
+PLAIN = 'plain'
+JSON = 'json'
+
+FORMAT_CHOICES = {
+    STYLISH: stylish.render,
+    PLAIN: plain.render,
+    JSON: jsonify.render
+}
 
 
-def formatter(format_option):
-    action = {'stylish': stylish.render,
-              'plain': plain.render,
-              'json': jsonify.render}
-    return action[format_option]
+def get_format_handler(format_option):
+    return FORMAT_CHOICES[format_option]

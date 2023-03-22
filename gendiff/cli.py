@@ -1,7 +1,7 @@
 import argparse
 import pathlib
 import gendiff
-from gendiff.format import CHOICES
+from gendiff.format import FORMAT_CHOICES
 
 
 def get_arguments():
@@ -26,7 +26,7 @@ def get_arguments():
     parser.add_argument('-f',
                         '--format',
                         help='output format (default: "%(default)s")',
-                        choices=CHOICES,
+                        choices=FORMAT_CHOICES.keys(),
                         metavar='',
                         default='stylish')
     data = parser.parse_args()
