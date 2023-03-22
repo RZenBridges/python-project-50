@@ -6,7 +6,7 @@ OPT = {'unchanged': '    ',
        'added': '  + '}
 
 
-def to_js(data):
+def switch_type(data):
     if not isinstance(data, dict):
         return json.dumps(data).replace('"', "")
 
@@ -19,7 +19,7 @@ def render(diffed):
         result = '{\n'
 
         if not isinstance(data, (tuple, list, dict)):
-            return to_js(data)
+            return switch_type(data)
 
         elif isinstance(data, dict):
             for key, val in data.items():
@@ -38,7 +38,7 @@ def render(diffed):
                     result += f'{step}{OPT["added"]}{key}: {added}\n'
 
                 else:
-                    result += f'{step}{OPT[state]}{key}: {to_js(val)}\n'
+                    result += f'{step}{OPT[state]}{key}: {switch_type(val)}\n'
 
         result += step + '}'
         return result

@@ -2,10 +2,6 @@ import json
 
 
 def render(diffed):
-    return json.dumps(adapt(diffed))
-
-
-def adapt(diffed):
     result = {}
 
     def inner(data, dic):
@@ -29,4 +25,4 @@ def adapt(diffed):
                 else:
                     dic[key] = {'status': status, 'value': value}
         return dic
-    return inner(diffed, result)
+    return json.dumps(inner(diffed, result))
