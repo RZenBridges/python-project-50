@@ -1,4 +1,4 @@
-from gendiff.diff_calc import generate_diff
+from gendiff.diff_manager import generate_diff
 
 
 __version__ = '1.0'

@@ -1,5 +1,3 @@
-from gendiff.data_parsing import read_and_parse_file
-from gendiff.format import formatter
 
 
 def build_diff(value1, value2):
@@ -22,11 +20,3 @@ def build_diff(value1, value2):
             else:
                 result.append((key, 'changed', (value1[key], value2[key])))
     return sorted(result)
-
-
-def generate_diff(file_path1, file_path2, format='stylish'):
-    format_fn = formatter(format)
-    content1 = read_and_parse_file(file_path1)
-    content2 = read_and_parse_file(file_path2)
-    result = format_fn(build_diff(content1, content2))
-    return result
