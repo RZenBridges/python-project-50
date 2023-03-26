@@ -17,6 +17,7 @@ def parse_json(opened_file):
 
 PARSER_OPTIONS = {'json': parse_json, 'yml': parse_yml}
 
+
 def parse(opened_file, format):
     format_fn = PARSER_OPTIONS.get(format)
     return format_fn(opened_file)

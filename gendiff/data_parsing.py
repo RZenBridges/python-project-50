@@ -9,4 +9,4 @@ def read_and_parse_file(path):
     if file_name.endswith('.json'):
         return content.parse(content.read_file(path), 'json')
     else:
-        print(f"The file has to be .json or .yaml/.yml")
+        raise ValueError('The file has to be .json or .yaml/.yml')
