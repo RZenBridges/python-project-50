@@ -5,6 +5,8 @@ from gendiff import content
 def read_and_parse_file(path):
     file_name = os.path.basename(path)
     if file_name.endswith('.yaml') or file_name.endswith('.yml'):
-        return content.parse_file(path, 'yml')
+        return content.parse(content.read_file(path), 'yml')
     if file_name.endswith('.json'):
-        return content.parse_file(path, 'json')
+        return content.parse(content.read_file(path), 'json')
+    else:
+        print(f"The file has to be .json or .yaml/.yml")

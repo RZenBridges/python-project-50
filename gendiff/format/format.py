@@ -14,5 +14,9 @@ FORMAT_CHOICES = {
 }
 
 
-def get_format_handler(format_option):
-    return FORMAT_CHOICES[format_option]
+def get_format_handler(format):
+    result = FORMAT_CHOICES.get(format)
+    if result is None:
+        print(f"Coundln't find the format {format} inside format package")
+    else:
+        return result

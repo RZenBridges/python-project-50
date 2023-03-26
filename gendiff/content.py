@@ -2,21 +2,21 @@ import json
 import yaml
 
 
-def _read_file(file_path):
+def read_file(file_path):
     with open(file_path) as data:
         return data.read()
 
 
-def _parse_yml(data):
-    return yaml.load(data, Loader=yaml.Loader)
+def parse_yml(opened_file):
+    return yaml.load(opened_file, Loader=yaml.Loader)
 
 
-def _parse_json(data):
-    return json.loads(data)
+def parse_json(opened_file):
+    return json.loads(opened_file)
 
 
-def parse_file(path, format):
-    parser = {'json': _parse_json, 'yml': _parse_yml}
-    data = _read_file(path)
-    format_fn = parser.get(format)
-    return format_fn(data)
+PARSER_OPTIONS = {'json': parse_json, 'yml': parse_yml}
+
+def parse(opened_file, format):
+    format_fn = PARSER_OPTIONS.get(format)
+    return format_fn(opened_file)
