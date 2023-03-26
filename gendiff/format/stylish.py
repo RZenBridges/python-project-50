@@ -36,10 +36,7 @@ def render(diffed):
                 else:
                     return data
 
-                if state in ('unchanged', 'nested'):
-                    result += f'{step}{OPT[state]}{key}: {inner(val, depth)}\n'
-
-                elif state == 'changed':
+                if state == 'changed':
                     removed = inner(val[0], depth)
                     added = inner(val[1], depth)
                     result += f'{step}{OPT["removed"]}{key}: {removed}\n'
