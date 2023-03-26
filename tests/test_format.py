@@ -1,36 +1,48 @@
+import pytest
 from gendiff.format import stylish, plain, jsonify
 
 
-with open('tests/fixtures/recursive_result.txt') as input:
-    data = input.read().split('\n\n')
-    input_check_1 = data[0]
-    input_check_2 = data[1]
+@pytest.mark.parametrize(
+    'test_input,expected', [
+        ('tests/fixtures/recursive_result_12.txt',
+         'tests/fixtures/format_stylish_12.txt'),
+        ('tests/fixtures/recursive_result_56.txt',
+         'tests/fixtures/format_stylish_56.txt')
+    ])
+def test_stylish(test_input, expected):
+    with open(expected) as data:
+        result = data.read().strip()
+    with open(test_input) as data:
+        file = eval(data.read())
+    out = stylish.render(file)
+    assert out == result
 
 
-def test_stylish_1():
-    with open('tests/fixtures/format_stylish.txt') as data:
-        result = data.read().strip().split('\n\n\n')
-        assert stylish.render(eval(input_check_1)) == result[0]
+@pytest.mark.parametrize(
+    'test_input,expected', [
+        ('tests/fixtures/recursive_result_12.txt',
+         'tests/fixtures/format_plain_12.txt'),
+        ('tests/fixtures/recursive_result_56.txt',
+         'tests/fixtures/format_plain_56.txt')
+    ])
+def test_plain(test_input, expected):
+    with open(expected) as data:
+        result = data.read().strip()
+    with open(test_input) as data:
+        file = eval(data.read())
+    out = plain.render(file)
+    assert out == result
 
 
-def test_stylish_2():
-    with open('tests/fixtures/format_stylish.txt') as data:
-        result = data.read().strip().split('\n\n\n')
-        assert stylish.render(eval(input_check_2)) == result[1]
-
-
-def test_plain_1():
-    with open('tests/fixtures/format_plain.txt') as data:
-        result = data.read().strip().split('\n\n\n')
-        assert plain.render(eval(input_check_1)) == result[0]
-
-
-def test_plain_2():
-    with open('tests/fixtures/format_plain.txt') as data:
-        result = data.read().strip().split('\n\n\n')
-        assert plain.render(eval(input_check_2)) == result[1]
-
-
-def test_jsonify_1():
-    with open('tests/fixtures/format_json.txt') as data:
-        assert jsonify.render(eval(input_check_1)) == data.read().strip()
+@pytest.mark.parametrize(
+    'test_input,expected', [
+        ('tests/fixtures/recursive_result_12.txt',
+         'tests/fixtures/format_json.txt')
+    ])
+def test_jsonify(test_input, expected):
+    with open(expected) as data:
+        result = data.read().strip()
+    with open(test_input) as data:
+        file = eval(data.read())
+    out = jsonify.render(file)
+    assert out == result
