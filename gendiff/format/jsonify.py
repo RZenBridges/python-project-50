@@ -10,10 +10,9 @@ def render(diffed):
                 key, status, value = item
                 if isinstance(value, list) and status == 'changed':
                     inner(value, dic)
-                elif isinstance(value, list) and status == 'unchanged':
-                    nested = {}
+                elif status == 'nested':
                     nested = inner(value, {})
-                    dic[key] = {'status': status, 'nested': nested}
+                    dic[key] = {'nested': nested}
                 elif isinstance(value, tuple) and status == 'changed':
                     dic[key] = {
                         'status': status,

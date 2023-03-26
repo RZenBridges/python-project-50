@@ -1,14 +1,18 @@
-import json
 
 
 OPT = {'unchanged': '    ',
        'removed': '  - ',
-       'added': '  + '}
+       'added': '  + ',
+       'nested': '    '}
 
 
-def switch_type(data):
-    if not isinstance(data, dict):
-        return json.dumps(data).replace('"', "")
+def conform(data):
+    if data in (True, False):
+        return str(data).lower()
+    elif data is None:
+        return 'null'
+    else:
+        return data
 
 
 def render(diffed):
@@ -19,7 +23,7 @@ def render(diffed):
         result = '{\n'
 
         if not isinstance(data, (tuple, list, dict)):
-            return switch_type(data)
+            return conform(data)
 
         elif isinstance(data, dict):
             for key, val in data.items():
@@ -27,8 +31,12 @@ def render(diffed):
 
         else:
             for item in data:
-                key, state, val = item
-                if state == 'unchanged' or isinstance(val, dict):
+                if isinstance(item, tuple):
+                    key, state, val = item
+                else:
+                    return data
+
+                if state in ('unchanged', 'nested'):
                     result += f'{step}{OPT[state]}{key}: {inner(val, depth)}\n'
 
                 elif state == 'changed':
@@ -38,7 +46,7 @@ def render(diffed):
                     result += f'{step}{OPT["added"]}{key}: {added}\n'
 
                 else:
-                    result += f'{step}{OPT[state]}{key}: {switch_type(val)}\n'
+                    result += f'{step}{OPT[state]}{key}: {inner(val, depth)}\n'
 
         result += step + '}'
         return result

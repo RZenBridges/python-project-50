@@ -16,7 +16,7 @@ def build_diff(value1, value2):
             result.append((key, 'unchanged', val1))
         else:
             if isinstance(val1, dict) and isinstance(val2, dict):
-                result.append((key, 'unchanged', build_diff(val1, val2)))
+                result.append((key, 'nested', build_diff(val1, val2)))
             else:
                 result.append((key, 'changed', (value1[key], value2[key])))
     return sorted(result)

@@ -24,7 +24,7 @@ def render(diffed):
                 line += f" From {switch_type(value[0])} "
                 line += f"to {switch_type(value[1])}"
                 listed_changes.append(line)
-            elif status == 'unchanged':
+            elif status == 'nested' or status == 'unchanged':
                 inner(value, level)
             elif status == 'added':
                 line = f"Property '{lvl}' was added with value: "
