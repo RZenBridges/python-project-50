@@ -1,12 +1,8 @@
 import os
-from gendiff import content
+from gendiff.content import parse
+from gendiff.files import read_file
 
 
 def read_and_parse_file(path):
-    file_name = os.path.basename(path)
-    if file_name.endswith('.yaml') or file_name.endswith('.yml'):
-        return content.parse(content.read_file(path), 'yml/yaml')
-    if file_name.endswith('.json'):
-        return content.parse(content.read_file(path), 'json')
-    else:
-        raise ValueError('The file has to be .json or .yml/.yaml')
+    extension = os.path.splitext(path)[1]
+    return parse(read_file(path), extension)
