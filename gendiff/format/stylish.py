@@ -1,50 +1,50 @@
+STATUS = {'unchanged': '    ',
+          'removed': '  - ',
+          'added': '  + ',
+          'nested': '    '}
 
 
-OPT = {'unchanged': '    ',
-       'removed': '  - ',
-       'added': '  + ',
-       'nested': '    '}
-
-
-def conform(data):
-    if data in (True, False):
-        return str(data).lower()
-    elif data is None:
+def adjust_output(value):
+    if isinstance(value, bool):
+        return str(value).lower()
+    elif value is None:
         return 'null'
     else:
-        return data
+        return value
 
 
 def render(diffed):
 
-    def inner(data, depth):
+    def inner(data, depth=0):
+        if not isinstance(data, (tuple, list, dict)):
+            return adjust_output(data)
+
         step = '    ' * depth
         depth += 1
-        result = '{\n'
+        result = ['{']
 
-        if not isinstance(data, (tuple, list, dict)):
-            return conform(data)
-
-        elif isinstance(data, dict):
+        if isinstance(data, dict):
             for key, val in data.items():
-                result += f'{step}    {key}: {inner(val, depth)}\n'
+                result.append(f'{step}    {key}: {inner(val, depth)}')
 
         else:
             for item in data:
                 if isinstance(item, tuple):
                     key, state, val = item
                 else:
-                    return data
+                    return adjust_output(data)
 
                 if state == 'changed':
                     removed = inner(val[0], depth)
                     added = inner(val[1], depth)
-                    result += f'{step}{OPT["removed"]}{key}: {removed}\n'
-                    result += f'{step}{OPT["added"]}{key}: {added}\n'
+                    result.append(f'{step}{STATUS["removed"]}{key}: {removed}')
+                    result.append(f'{step}{STATUS["added"]}{key}: {added}')
 
                 else:
-                    result += f'{step}{OPT[state]}{key}: {inner(val, depth)}\n'
+                    # elif state in STATUS:
+                    value = inner(val, depth)
+                    result.append(f'{step}{STATUS[state]}{key}: {value}')
 
-        result += step + '}'
-        return result
-    return inner(diffed, 0)
+        result.append(f'{step}}}')
+        return '\n'.join(result)
+    return inner(diffed)

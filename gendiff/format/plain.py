@@ -4,7 +4,7 @@ ADDED = 'added'
 REMOVED = 'removed'
 
 
-def conform(value):
+def adjust_output(value):
     if isinstance(value, (bool, int)):
         return str(value).lower()
     elif value is None:
@@ -25,14 +25,14 @@ def render(diffed):
             lvl = level[:-1]
             if status == CHANGED:
                 line = f"Property '{lvl}' was updated."
-                line += f" From {conform(value[0])} "
-                line += f"to {conform(value[1])}"
+                line += f" From {adjust_output(value[0])} "
+                line += f"to {adjust_output(value[1])}"
                 listed_changes.append(line)
             elif status == NESTED:
                 inner(value, level)
             elif status == ADDED:
                 line = f"Property '{lvl}' was added with value: "
-                line += f"{conform(value)}"
+                line += f"{adjust_output(value)}"
                 listed_changes.append(line)
             elif status == REMOVED:
                 line = f"Property '{lvl}' was removed"
