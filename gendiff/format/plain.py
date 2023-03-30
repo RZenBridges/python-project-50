@@ -1,13 +1,16 @@
+NESTED = 'nested'
+CHANGED = 'changed'
+ADDED = 'added'
+REMOVED = 'removed'
 
 
-def conform(data):
-    if not isinstance(data, (dict, list)):
-        if data in (True, False):
-            return str(data).lower()
-        elif data is None:
-            return 'null'
-        else:
-            return f"'{data}'"
+def conform(value):
+    if isinstance(value, (bool, int)):
+        return str(value).lower()
+    elif value is None:
+        return 'null'
+    elif not isinstance(value, (dict, list)):
+        return f"'{value}'"
     else:
         return "[complex value]"
 
@@ -16,25 +19,22 @@ def render(diffed):
     listed_changes = []
 
     def inner(data, level):
-        if not isinstance(data, list):
-            return
-
         for item in data:
             key, status, value = item
             level += f'{key}.'
             lvl = level[:-1]
-            if status == 'changed':
+            if status == CHANGED:
                 line = f"Property '{lvl}' was updated."
                 line += f" From {conform(value[0])} "
                 line += f"to {conform(value[1])}"
                 listed_changes.append(line)
-            elif status == 'nested' or status == 'unchanged':
+            elif status == NESTED:
                 inner(value, level)
-            elif status == 'added':
+            elif status == ADDED:
                 line = f"Property '{lvl}' was added with value: "
                 line += f"{conform(value)}"
                 listed_changes.append(line)
-            elif status == 'removed':
+            elif status == REMOVED:
                 line = f"Property '{lvl}' was removed"
                 listed_changes.append(line)
             level = level[:-len(key) - 1]

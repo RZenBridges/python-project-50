@@ -15,8 +15,9 @@ FORMAT_CHOICES = {
 
 
 def get_format_handler(format):
-    result = FORMAT_CHOICES.get(format)
-    if result is None:
-        print(f"Coundln't find the format {format} inside format package")
-    else:
+    try:
+        result = FORMAT_CHOICES[format]
         return result
+    except KeyError as missing:
+        raise ValueError(f"Coundln't find the format "
+                         f"{missing} inside format package")
