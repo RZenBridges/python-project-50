@@ -34,16 +34,15 @@ def render(diffed):
                 else:
                     return adjust_output(data)
 
-                if state == 'changed':
+                if state in STATUS:
+                    value = inner(val, depth)
+                    result.append(f'{step}{STATUS[state]}{key}: {value}')
+
+                else:
                     removed = inner(val[0], depth)
                     added = inner(val[1], depth)
                     result.append(f'{step}{STATUS["removed"]}{key}: {removed}')
                     result.append(f'{step}{STATUS["added"]}{key}: {added}')
-
-                else:
-                    # elif state in STATUS:
-                    value = inner(val, depth)
-                    result.append(f'{step}{STATUS[state]}{key}: {value}')
 
         result.append(f'{step}}}')
         return '\n'.join(result)

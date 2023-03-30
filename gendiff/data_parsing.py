@@ -1,4 +1,5 @@
 import os
+
 from gendiff.content import parse
 from gendiff.files import read_file
 

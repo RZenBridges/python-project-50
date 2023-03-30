@@ -1,5 +1,6 @@
 import argparse
 import pathlib
+
 import gendiff
 from gendiff.format import FORMAT_CHOICES
 
