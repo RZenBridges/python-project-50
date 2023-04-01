@@ -30,5 +30,5 @@ def get_arguments():
                         choices=FORMAT_CHOICES.keys(),
                         metavar='',
                         default='stylish')
-    data = parser.parse_args()
-    return (data.first_file, data.second_file, data.format)
+    args = parser.parse_args()
+    return args.first_file, args.second_file, args.format
