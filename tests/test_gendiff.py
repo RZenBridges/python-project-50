@@ -1,6 +1,7 @@
 import pytest
 from gendiff import generate_diff
 from gendiff.files import read_file
+from gendiff.format import STYLISH, PLAIN, JSON
 
 
 INPUT_JSON_FILE_1 = 'tests/fixtures/input_files/file1.json'
@@ -11,7 +12,6 @@ INPUT_JSON_FILE_7 = 'tests/fixtures/input_files/file7.json'
 INPUT_JSON_FILE_8 = 'tests/fixtures/input_files/file8.json'
 
 
-
 @pytest.mark.parametrize(
     'file1,file2,expected_result_file', [
         (INPUT_YML_FILE_5, INPUT_YML_FILE_6,
@@ -20,7 +20,7 @@ INPUT_JSON_FILE_8 = 'tests/fixtures/input_files/file8.json'
          'tests/fixtures/format_stylish_78.txt'),
     ])
 def test_gendiff_stylish(file1, file2, expected_result_file):
-    diff = generate_diff(file1, file2, format='stylish')
+    diff = generate_diff(file1, file2, format=STYLISH)
     assert diff == read_file(expected_result_file)
 
 
@@ -32,7 +32,7 @@ def test_gendiff_stylish(file1, file2, expected_result_file):
          'tests/fixtures/format_plain_78.txt'),
     ])
 def test_gendiff_plain(file1, file2, expected_result_file):
-    diff = generate_diff(file1, file2, format='plain')
+    diff = generate_diff(file1, file2, format=PLAIN)
     assert diff == read_file(expected_result_file)
 
 
@@ -42,5 +42,5 @@ def test_gendiff_plain(file1, file2, expected_result_file):
          'tests/fixtures/format_json.txt')
     ])
 def test_gendiff_json(file1, file2, expected_result_file):
-    diff = generate_diff(file1, file2, format='json')
+    diff = generate_diff(file1, file2, format=JSON)
     assert diff == read_file(expected_result_file)

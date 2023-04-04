@@ -1,9 +1,13 @@
-import os
+from gendiff.content import parse_yml, parse_json
 
-from gendiff.content import parse
-from gendiff.files import read_file
+PARSER_OPTION = {'.json': parse_json,
+                 '.yml': parse_yml,
+                 '.yaml': parse_yml}
 
 
-def read_and_parse_file(path):
-    extension = os.path.splitext(path)[1]
-    return parse(read_file(path), extension)
+def parse(opened_file, format):
+    format_fn = PARSER_OPTION.get(format)
+    if format_fn is None:
+        raise ValueError(f"Unavailable parser option '{format}'. "
+                         "It has to be '.json', '.yml' or '.yaml'")
+    return format_fn(opened_file)

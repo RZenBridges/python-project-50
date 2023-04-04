@@ -4,7 +4,7 @@ STATUS = {'unchanged': '    ',
           'nested': '    '}
 
 
-def adjust_output(value):
+def stringify(value):
     if isinstance(value, bool):
         return str(value).lower()
     elif value is None:
@@ -17,7 +17,7 @@ def render(diffed):
 
     def inner(data, depth=0):
         if not isinstance(data, (tuple, list, dict)):
-            return adjust_output(data)
+            return stringify(data)
 
         step = '    ' * depth
         depth += 1
@@ -32,7 +32,7 @@ def render(diffed):
                 if isinstance(item, tuple):
                     key, state, val = item
                 else:
-                    return adjust_output(data)
+                    return stringify(data)
 
                 if state in STATUS:
                     value = inner(val, depth)
