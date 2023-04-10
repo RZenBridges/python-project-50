@@ -1,14 +1,23 @@
+import json
+
 STATUS = {'unchanged': '    ',
           'removed': '  - ',
           'added': '  + ',
           'nested': '    '}
 
+INDENT = '    '
 
-def stringify(value):
+
+def stringify(value, step=0):
     if isinstance(value, bool):
         return str(value).lower()
     elif value is None:
         return 'null'
+    elif isinstance(value, dict):
+        data = json.dumps(value, indent=4, separators=('', ': ')).split('\n')
+        for i in range(1, len(data)):
+            data[i] = INDENT * step + data[i]
+        return '\n'.join(data).replace('"', '')
     else:
         return value
 
@@ -16,34 +25,29 @@ def stringify(value):
 def render(diffed):
 
     def inner(data, depth=0):
-        if not isinstance(data, (tuple, list, dict)):
-            return stringify(data)
-
-        step = '    ' * depth
-        depth += 1
+        off = depth * INDENT
+        next = depth + 1
         result = ['{']
 
-        if isinstance(data, dict):
-            for key, val in data.items():
-                result.append(f'{step}    {key}: {inner(val, depth)}')
+        for item in data:
+            key, status, val = item
+            sign = STATUS.get(status)
 
-        else:
-            for item in data:
-                if isinstance(item, tuple):
-                    key, state, val = item
-                else:
-                    return stringify(data)
+            if status in ('added', 'removed'):
+                result.append(f'{off}{sign}{key}: {stringify(val, next)}')
 
-                if state in STATUS:
-                    value = inner(val, depth)
-                    result.append(f'{step}{STATUS[state]}{key}: {value}')
+            elif status == 'changed':
+                result.append(f'{off}{STATUS["removed"]}{key}: '
+                              f'{stringify(val[0], next)}')
+                result.append(f'{off}{STATUS["added"]}{key}: '
+                              f'{stringify(val[1], next)}')
 
-                else:
-                    removed = inner(val[0], depth)
-                    added = inner(val[1], depth)
-                    result.append(f'{step}{STATUS["removed"]}{key}: {removed}')
-                    result.append(f'{step}{STATUS["added"]}{key}: {added}')
+            elif status == 'unchanged':
+                result.append(f'{off}{sign}{key}: {stringify(val)}')
 
-        result.append(f'{step}}}')
+            elif status == 'nested':
+                result.append(f'{off}{sign}{key}: {inner(val, next)}')
+
+        result.append(f'{off}}}')
         return '\n'.join(result)
     return inner(diffed)
