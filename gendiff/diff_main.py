@@ -1,6 +1,6 @@
 import os
 
-from gendiff.data_parsing import parse
+from gendiff.content.data_parsing import parse
 from gendiff.diff_builder import build_diff
 from gendiff.files import read_file
 from gendiff.format import get_format_handler, STYLISH
