@@ -1,37 +1,20 @@
-
-STATUS = {'unchanged': '    ',
-          'removed': '  - ',
-          'added': '  + ',
-          'nested': '    '}
-
+UNCHANGED = 'unchanged'
+NESTED = 'nested'
+REMOVED = 'removed'
+ADDED = 'added'
+STATUS_SIGNS = {UNCHANGED: '    ',
+                REMOVED: '  - ',
+                ADDED: '  + ',
+                NESTED: '    '}
 INDENT = '    '
 
 
-def stringify(value, off=0):
+def stringify(value):
     if isinstance(value, bool):
         return str(value).lower()
 
     elif value is None:
         return 'null'
-
-    elif isinstance(value, dict):
-
-        def unfold_dict(dic, depth):
-            step = INDENT * depth
-            yield "{"
-
-            for k, v in dic.items():
-                new_step = INDENT * (depth + 1)
-                if isinstance(v, dict):
-                    unfolded = '\n'.join(unfold_dict(v, depth + 1))
-                    yield f'{new_step}{k}: {unfolded}'
-
-                else:
-                    yield f'{new_step}{k}: {stringify(v)}'
-
-            yield f"{step}}}"
-
-        return '\n'.join(unfold_dict(value, off))
 
     else:
         return value
@@ -41,18 +24,29 @@ def render(diffed):
 
     def inner(data, depth=0):
         off = depth * INDENT
-        result = ['{']
+        tail_off = off + INDENT
+        result = []
 
         for item in data:
             key, status, val = item
-            sign = STATUS.get(status)
+            sign = STATUS_SIGNS.get(status)
 
-            if status in ('added', 'removed', 'unchanged'):
-                result.append(f'{off}{sign}{key}: {stringify(val, depth + 1)}')
+            if status in (ADDED, REMOVED, UNCHANGED):
 
-            elif status == 'nested':
-                result.append(f'{off}{sign}{key}: {inner(val, depth + 1)}')
+                if isinstance(val, dict):
+                    values = []
+                    for k, v in val.items():
+                        values.append(
+                            inner([(k, UNCHANGED, stringify(v))], depth + 1)
+                        )
+                    value = '\n'.join(['{'] + values + [f'{tail_off}}}'])
+                else:
+                    value = stringify(val)
+                result.append(f'{off}{sign}{key}: {value}')
 
-        result.append(f'{off}}}')
+            elif status == NESTED:
+                result.append(f'{off}{sign}{key}: '
+                              f'{{\n{inner(val, depth + 1)}\n{tail_off}}}')
+
         return '\n'.join(result)
-    return inner(diffed)
+    return f'{{\n{inner(diffed)}\n}}'
