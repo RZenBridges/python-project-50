@@ -22,6 +22,7 @@ def build_diff(value1, value2):
             if isinstance(val1, dict) and isinstance(val2, dict):
                 result.append((key, NESTED, build_diff(val1, val2)))
             else:
-                result.append((key, (value1[key], value2[key])))
-    result.sort()
+                result.append((key, REMOVED, value1[key]))
+                result.append((key, ADDED, value2[key]))
+    result.sort(key=lambda x: x[0])
     return result
