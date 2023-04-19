@@ -7,7 +7,8 @@
       + setting3: {
             key: value
         }
-      + setting4: blah blah
+      - setting4: null
+      + setting4: ['blah', 'blah']
       + setting5: {
             key5: value5
         }
@@ -23,7 +24,8 @@
     group1: {
       - baz: bas
       + baz: bars
-        foo: bar
+      - foo: ['bar', 'bar']
+      + foo: bar
       - nest: {
             key: value
         }

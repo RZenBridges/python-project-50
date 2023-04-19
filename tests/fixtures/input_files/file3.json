@@ -3,6 +3,7 @@
     "setting1": "Value 1",
     "setting2": 200,
     "setting3": true,
+    "setting4": null,
     "setting6": {
       "key": "value",
       "doge": {
@@ -12,7 +13,7 @@
   },
   "group1": {
     "baz": "bas",
-    "foo": "bar",
+    "foo": ["bar", "bar"],
     "nest": {
       "key": "value"
     }
