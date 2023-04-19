@@ -1,7 +1,6 @@
-from gendiff.format import stylish
-from gendiff.format import plain
 from gendiff.format import jsonify
-
+from gendiff.format import plain
+from gendiff.format import stylish
 
 STYLISH = 'stylish'
 PLAIN = 'plain'

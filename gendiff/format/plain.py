@@ -14,28 +14,23 @@ def stringify(value):
 
 def render(diffed):
     listed_changes = []
-    previous_key = ''
-    previous_value = ''
+    passed = {}
 
     def inner(data, level):
 
-        nonlocal previous_key
-        nonlocal previous_value
         for item in data:
             key, status, value = item
-
             level.append(key)
             path = '.'.join(level)
 
             if status == NESTED:
                 inner(value, level)
-            elif status == ADDED and key == previous_key:
+            elif status == ADDED and key in passed:
                 listed_changes.pop(-1)
                 line = f"Property '{path}' was updated."\
-                       f" From {stringify(previous_value)} "\
+                       f" From {stringify(passed[key])} "\
                        f"to {stringify(value)}"
                 listed_changes.append(line)
-
             elif status == ADDED:
                 line = f"Property '{path}' was added with value: "\
                        f"{stringify(value)}"
@@ -43,8 +38,7 @@ def render(diffed):
             elif status == REMOVED:
                 line = f"Property '{path}' was removed"
                 listed_changes.append(line)
-                previous_key = key
-                previous_value = value
+                passed[key] = value
 
             level.pop(-1)
         return '\n'.join(listed_changes)

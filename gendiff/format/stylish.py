@@ -10,10 +10,8 @@ INDENT = '    '
 def stringify(value):
     if isinstance(value, bool):
         return str(value).lower()
-
     elif value is None:
         return 'null'
-
     else:
         return value
 
@@ -29,8 +27,10 @@ def render(diffed):
             key, status, val = item
             sign = STATUS_SIGNS.get(status)
 
-            if status in (ADDED, REMOVED, UNCHANGED):
-
+            if status == NESTED:
+                result.append(f'{off}{sign}{key}: '
+                              f'{{\n{inner(val, depth + 1)}\n{tail_off}}}')
+            else:
                 if isinstance(val, dict):
                     values = []
                     for k, v in val.items():
@@ -41,10 +41,6 @@ def render(diffed):
                 else:
                     value = stringify(val)
                 result.append(f'{off}{sign}{key}: {value}')
-
-            elif status == NESTED:
-                result.append(f'{off}{sign}{key}: '
-                              f'{{\n{inner(val, depth + 1)}\n{tail_off}}}')
 
         return '\n'.join(result)
     return f'{{\n{inner(diffed)}\n}}'

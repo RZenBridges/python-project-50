@@ -1,4 +1,5 @@
 import pytest
+
 from gendiff import generate_diff
 from gendiff.files import read_file
 from gendiff.format import STYLISH, PLAIN, JSON

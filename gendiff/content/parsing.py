@@ -9,5 +9,5 @@ def parse(file_obj, format):
     format_fn = PARSER_OPTIONS.get(format)
     if format_fn is None:
         raise ValueError(f"Unavailable parser option '{format}'. "
-                         "It has to be '.json', '.yml' or '.yaml'")
+                         f"It has to be {'/'.join(PARSER_OPTIONS.keys())}")
     return format_fn(file_obj)
