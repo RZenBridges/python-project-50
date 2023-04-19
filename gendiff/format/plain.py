@@ -1,6 +1,4 @@
-NESTED = 'nested'
-ADDED = 'added'
-REMOVED = 'removed'
+from gendiff.diff_builder import NESTED, ADDED, REMOVED
 
 
 def stringify(value):
@@ -11,7 +9,7 @@ def stringify(value):
     elif not isinstance(value, (dict, list)):
         return f"'{value}'"
     else:
-        return "[complex value]"
+        return '[complex value]'
 
 
 def render(diffed):
@@ -27,23 +25,23 @@ def render(diffed):
             key, status, value = item
 
             level.append(key)
-            lvl = '.'.join(level)
+            path = '.'.join(level)
 
             if status == NESTED:
                 inner(value, level)
             elif status == ADDED and key == previous_key:
                 listed_changes.pop(-1)
-                line = f"Property '{lvl}' was updated."\
+                line = f"Property '{path}' was updated."\
                        f" From {stringify(previous_value)} "\
                        f"to {stringify(value)}"
                 listed_changes.append(line)
 
             elif status == ADDED:
-                line = f"Property '{lvl}' was added with value: "\
+                line = f"Property '{path}' was added with value: "\
                        f"{stringify(value)}"
                 listed_changes.append(line)
             elif status == REMOVED:
-                line = f"Property '{lvl}' was removed"
+                line = f"Property '{path}' was removed"
                 listed_changes.append(line)
                 previous_key = key
                 previous_value = value

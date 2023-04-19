@@ -1,7 +1,5 @@
-UNCHANGED = 'unchanged'
-NESTED = 'nested'
-REMOVED = 'removed'
-ADDED = 'added'
+from gendiff.diff_builder import UNCHANGED, NESTED, ADDED, REMOVED
+
 STATUS_SIGNS = {UNCHANGED: '    ',
                 REMOVED: '  - ',
                 ADDED: '  + ',
