@@ -13,7 +13,7 @@ def stringify(value):
 
 
 def render(diffed):
-    listed_changes = []
+    listed_changes = {}
     passed = {}
 
     def inner(data, level):
@@ -26,20 +26,19 @@ def render(diffed):
             if status == NESTED:
                 inner(value, level)
             elif status == ADDED and key in passed:
-                listed_changes.pop(-1)
                 line = f"Property '{path}' was updated."\
                        f" From {stringify(passed[key])} "\
                        f"to {stringify(value)}"
-                listed_changes.append(line)
+                listed_changes[path] = line
             elif status == ADDED:
                 line = f"Property '{path}' was added with value: "\
                        f"{stringify(value)}"
-                listed_changes.append(line)
+                listed_changes[path] = line
             elif status == REMOVED:
                 line = f"Property '{path}' was removed"
-                listed_changes.append(line)
+                listed_changes[path] = line
                 passed[key] = value
 
             level.pop(-1)
-        return '\n'.join(listed_changes)
+        return '\n'.join(listed_changes.values())
     return inner(diffed, [])
