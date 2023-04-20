@@ -31,11 +31,12 @@ def render(diffed):
             elif status == ADDED:
                 line = f"Property '{path}' was added with value: "\
                        f"{stringify(value)}"
-                result[path].update({'line': line, status[:]: value})
             elif status == REMOVED:
                 line = f"Property '{path}' was removed"
-                result[path].update({'line': line, status[:]: value})
 
+            result[path].update({'line': line, status: value})
+
+            # check if result[path] has 3 keys: line, added, removed
             if len(result[path]) == 3:
                 line = f"Property '{path}' was updated."\
                        f" From {stringify(result[path][REMOVED])} "\

@@ -44,7 +44,7 @@ def render(diffed):
                 # Check if the current key == previous key in the result
                 if result and\
                     key == result[-1].split(':')[0].split(' ')[-1] and\
-                        sign.strip() == '-':
+                        sign == STATUS_SIGNS[REMOVED]:
                     result.insert(-1, f'{off}{sign}{key}: {value}')
                 else:
                     result.append(f'{off}{sign}{key}: {value}')
