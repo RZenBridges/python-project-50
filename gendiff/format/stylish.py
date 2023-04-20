@@ -41,6 +41,5 @@ def render(diffed):
                 else:
                     value = stringify(val)
                 result.append(f'{off}{sign}{key}: {value}')
-
         return '\n'.join(result)
     return f'{{\n{inner(diffed)}\n}}'
