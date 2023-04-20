@@ -24,5 +24,5 @@ def build_diff(value1, value2):
             else:
                 result.append((key, REMOVED, value1[key]))
                 result.append((key, ADDED, value2[key]))
-    result.sort(key=lambda x: x[0])
+    result.sort()
     return result

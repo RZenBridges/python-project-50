@@ -40,6 +40,14 @@ def render(diffed):
                     value = '\n'.join(['{'] + values + [f'{tail_off}}}'])
                 else:
                     value = stringify(val)
-                result.append(f'{off}{sign}{key}: {value}')
+
+                # Check if the current key == previous key in the result
+                if result and\
+                    key == result[-1].split(':')[0].split(' ')[-1] and\
+                        sign.strip() == '-':
+                    result.insert(-1, f'{off}{sign}{key}: {value}')
+                else:
+                    result.append(f'{off}{sign}{key}: {value}')
+
         return '\n'.join(result)
     return f'{{\n{inner(diffed)}\n}}'
