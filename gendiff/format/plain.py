@@ -18,27 +18,24 @@ def render(diff):
     def inner(data, keys):
         for item in data:
             key, status, value = item
+            if status == UNCHANGED:
+                continue
             keys.append(key)
             path = '.'.join(keys)
-            line = None
 
-            if status == UNCHANGED:
-                keys.pop()
-                continue
-            elif status == NESTED:
+            if status == NESTED:
                 inner(value, keys)
             elif status == CHANGED:
-                line = f"Property '{path}' was updated."\
-                       f" From {stringify(value[0])} "\
-                       f"to {stringify(value[1])}"
+                result.append(f"Property '{path}' was updated. "
+                              f"From {stringify(value[0])} "
+                              f"to {stringify(value[1])}")
             elif status == ADDED:
-                line = f"Property '{path}' was added with value: "\
-                       f"{stringify(value)}"
+                result.append(f"Property '{path}' was added with value: "
+                              f"{stringify(value)}")
             elif status == REMOVED:
-                line = f"Property '{path}' was removed"
+                result.append(f"Property '{path}' was removed")
 
             keys.pop()
-            result.append(line)
 
-        return '\n'.join([line for line in result if line])
+        return '\n'.join([line for line in result])
     return inner(diff, [])
