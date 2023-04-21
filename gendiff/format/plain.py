@@ -1,6 +1,4 @@
-from collections import defaultdict
-
-from gendiff.diff_builder import NESTED, ADDED, REMOVED
+from gendiff.diff_builder import NESTED, ADDED, REMOVED, CHANGED
 
 
 def stringify(value):
@@ -15,35 +13,29 @@ def stringify(value):
 
 
 def render(diffed):
-    result = defaultdict(dict)
+    result = []
 
     def inner(data, keys):
-
         for item in data:
             key, status, value = item
             keys.append(key)
             path = '.'.join(keys)
-            line = ''
-            result[path].update({'line': line})
+            line = False
 
             if status == NESTED:
                 inner(value, keys)
+            elif status == CHANGED:
+                line = f"Property '{path}' was updated."\
+                       f" From {stringify(value[0])} "\
+                       f"to {stringify(value[1])}"
             elif status == ADDED:
                 line = f"Property '{path}' was added with value: "\
                        f"{stringify(value)}"
             elif status == REMOVED:
                 line = f"Property '{path}' was removed"
 
-            result[path].update({'line': line, status: value})
-
-            # check if result[path] has 3 keys: line, added, removed
-            if len(result[path]) == 3:
-                line = f"Property '{path}' was updated."\
-                       f" From {stringify(result[path][REMOVED])} "\
-                       f"to {stringify(result[path][ADDED])}"
-                result[path].update({'line': line})
-
             keys.pop()
-        return '\n'.join([dic['line'] for dic in result.values()
-                         if dic['line']])
+            result.append(line)
+
+        return '\n'.join([line for line in result if line])
     return inner(diffed, [])

@@ -2,6 +2,7 @@ UNCHANGED = 'unchanged'
 NESTED = 'nested'
 ADDED = 'added'
 REMOVED = 'removed'
+CHANGED = 'changed'
 
 
 def build_diff(value1, value2):
@@ -22,7 +23,6 @@ def build_diff(value1, value2):
             if isinstance(val1, dict) and isinstance(val2, dict):
                 result.append((key, NESTED, build_diff(val1, val2)))
             else:
-                result.append((key, REMOVED, value1[key]))
-                result.append((key, ADDED, value2[key]))
+                result.append((key, CHANGED, (value1[key], value2[key])))
     result.sort()
     return result
