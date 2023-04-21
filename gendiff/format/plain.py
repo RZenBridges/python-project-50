@@ -1,4 +1,4 @@
-from gendiff.diff_builder import NESTED, ADDED, REMOVED, CHANGED
+from gendiff.diff_builder import NESTED, ADDED, REMOVED, CHANGED, UNCHANGED
 
 
 def stringify(value):
@@ -12,7 +12,7 @@ def stringify(value):
         return '[complex value]'
 
 
-def render(diffed):
+def render(diff):
     result = []
 
     def inner(data, keys):
@@ -20,9 +20,12 @@ def render(diffed):
             key, status, value = item
             keys.append(key)
             path = '.'.join(keys)
-            line = False
+            line = None
 
-            if status == NESTED:
+            if status == UNCHANGED:
+                keys.pop()
+                continue
+            elif status == NESTED:
                 inner(value, keys)
             elif status == CHANGED:
                 line = f"Property '{path}' was updated."\
@@ -38,4 +41,4 @@ def render(diffed):
             result.append(line)
 
         return '\n'.join([line for line in result if line])
-    return inner(diffed, [])
+    return inner(diff, [])

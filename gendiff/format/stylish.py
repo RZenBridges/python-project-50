@@ -23,7 +23,7 @@ def stringify(value, depth=0):
         return value
 
 
-def render(diffed):
+def render(diff):
 
     def inner(data, depth=0):
         off = depth * INDENT
@@ -42,8 +42,8 @@ def render(diffed):
                               f'{stringify(val[0], depth + 1)}')
                 result.append(f'{off}{STATUS_SIGNS[ADDED]}{key}: '
                               f'{stringify(val[1], depth + 1)}')
-            elif status in (ADDED, REMOVED, UNCHANGED):
+            else:
                 result.append(f'{off}{sign}{key}: {stringify(val, depth + 1)}')
 
         return '\n'.join(result)
-    return f'{{\n{inner(diffed)}\n}}'
+    return f'{{\n{inner(diff)}\n}}'
